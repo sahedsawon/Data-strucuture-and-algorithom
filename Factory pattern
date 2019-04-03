@@ -1,0 +1,138 @@
+class CarFactory {
+
+    public static function build(string $class)
+    {
+        if ($class == '') {
+            echo "class name missing";
+        }else{
+            $className = $class.'Car';
+            if ( class_exists($className) ) {
+                return new $className();
+            }
+            echo "class not defined yet!";
+        }
+    }
+}
+
+
+class SedanCar {
+    /**
+     * @var
+     */
+    private $color ;
+    /**
+     * @var
+     */
+    private $model = 'Sedan';
+
+    /**
+     * @return mixed
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     */
+    public function setColor(string $color): void
+    {
+        $this->color = $color;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function __toString(){
+     return "color :  ".$this->getColor()." model : ".$this->getModel();
+    }
+
+}
+
+
+class ZipCar {
+
+    /**
+     * @var
+     */
+    private $speed;
+    /**
+     * @var
+     */
+    private $color ;
+    /**
+     * @var
+     */
+    private $model = 'Zip';
+
+    /**
+     * @return mixed
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     */
+    public function setColor(string $color): void
+    {
+        $this->color = $color;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSpeed() :int
+    {
+        return $this->speed;
+    }
+
+    /**
+     * @param int $speed
+     */
+    public function setSpeed(int $speed): void
+    {
+        $this->speed = $speed;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function __toString(){
+        return "color :  ".$this->getColor()." model : ".$this->getModel()." Speed : ".$this->getSpeed();
+    }
+}
+
+//client code
+
+$sedan = CarFactory::build("Sedan");
+
+$sedan->setColor("Red");
+echo  $sedan;
+
+$Zip = CarFactory::build("Zip");
+
+$Zip->setColor("Red");
+$Zip->setSpeed(120);
+echo  $Zip;
