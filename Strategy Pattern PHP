@@ -1,0 +1,137 @@
+
+/**
+ * Interface StrategyInterface
+ */
+interface StrategyInterface {
+    public function showTitle($book);
+}
+
+/**
+ * Class Context
+ */
+class Context {
+
+
+    /**
+     * @var 
+     */
+    private $context;
+    /**
+     * Context constructor.
+     * @param $context
+     */
+    public function __construct($context)
+    {
+        switch ($context) {
+            case 'a' :
+                $this->context = new ImplementationA();
+                break;
+            case 'b' :
+                $this->context = new ImplementationB();
+                break;
+            case 'c' :
+                $this->context = new ImplementationC();
+                break;
+        }
+
+    }
+
+    /**
+     * @param $book
+     */
+    public function showBookTitle($book)
+    {
+         $this->context->showTitle($book);
+    }
+
+}
+
+/**
+ * Class ImplementationA
+ */
+class ImplementationA  implements StrategyInterface {
+    /**
+     * @param $book
+     */
+    public function showTitle($book)
+    {
+        echo $book->getTitle() ." --- ". $book->getAuthor()."<br>";
+    }
+
+}
+
+
+class ImplementationB  implements StrategyInterface {
+    /**
+     * @param $book
+     */
+    public function showTitle($book)
+    {
+        echo $book->getTitle() ." ... ". $book->getAuthor()."<br>";
+
+    }
+
+}
+
+class ImplementationC  implements StrategyInterface {
+    /**
+     * @param $book
+     */
+    public function showTitle($book)
+    {
+        echo $book->getTitle() ." :::". $book->getAuthor()."<br>";
+
+    }
+
+}
+
+class Book {
+    /**
+     * @var 
+     */
+    private $author;
+    /**
+     * @var 
+     */
+    private $title;
+
+    /**
+     * Book constructor.
+     * @param $author
+     * @param $title
+     */
+    public function __construct($author, $title)
+    {
+        $this->author = $author;
+        $this->title = $title;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+}
+
+$book = new Book('Sahed sawon','Cori cori copke copke');
+
+$a = new Context('a');
+$b = new Context('b');
+$c = new Context('c');
+
+$a->showBookTitle($book);
+$b->showBookTitle($book);
+$c->showBookTitle($book);
+
+
