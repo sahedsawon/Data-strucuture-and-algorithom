@@ -1,0 +1,161 @@
+<?php
+class CheckAccount {
+    /**
+     * @var int
+     */
+    private $accountNum = 0;
+
+    /**
+     * @param $accountNum
+     */
+    public function __construct($accountNum) {
+        $this->accountNum = $accountNum;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAccountNum() {
+        return $this->accountNum;
+	 }
+
+    /**
+     * @return bool
+     */
+    public function isAccountExit() {
+        return true;
+    }
+
+}
+
+
+class SecurityCheck{
+
+    /**
+     * @var $securityCode
+     */
+    private $securityCode;
+
+    /**
+     * @param string $securityCode
+     */
+    public function __construct(string $securityCode) {
+        $this->securityCode = $securityCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSecurityCode() {
+        return $this->securityCode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSecurityPassed() {
+        return true;
+    }
+
+}
+
+class Transaction{
+    /**
+     * @var
+     */
+    private $amount;
+
+    /**
+     * @param float $amount
+     */
+    public function __construct(float $amount=500.00) {
+        $this->amount = $amount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmount() {
+        return $this->amount;
+    }
+
+
+    /**
+     * @param float $transectionAmount
+     * @return $this
+     * @throws \Exception
+     */
+    public function withdraw(float $transectionAmount) {
+        if( !$this->isFundAvialbel($transectionAmount) ) throw new \Exception("Fund is not avialbel");
+
+        $this->amount -= $transectionAmount;
+        return	$this;
+    }
+
+    /**
+     * @param float $transectionAmount
+     * @return $this
+     */
+    public function deposite(float $transectionAmount) {
+        $this->amount += $transectionAmount;
+        return	$this;
+    }
+
+    /**
+     * @param float $transectionAmount
+     * @return bool
+     */
+    private function isFundAvialbel(float $transectionAmount) {
+        return $this->getAmount() - $transectionAmount > 0;
+    }
+}
+
+
+class BankFacade {
+
+    public static function deposit(int $accountNum, string $securityCode, float $transactionAmount)
+    {
+        $accNum = (new CheckAccount($accountNum))->isAccountExit();
+        $sCode = (new SecurityCheck($securityCode))->isSecurityPassed();
+        $tAmount = new Transaction();
+
+        try{
+            echo  "<br> Before deposit ".$tAmount->getAmount();
+            $x = $tAmount->deposite($transactionAmount);
+            echo "<br> Deposit done";
+            echo "<br> Current account balance ".$x->getAmount();
+        }catch (\Exception $exception) {
+            echo $exception->getMessage();
+            exit;
+        }
+    }
+
+    public static function withdraw(int $accountNum, string $securityCode, float $transactionAmount)
+    {
+        $accNum = (new CheckAccount($accountNum))->isAccountExit();
+        $sCode = (new SecurityCheck($securityCode))->isSecurityPassed();
+        $tAmount = new Transaction();
+        try{
+             $x = $tAmount->withdraw($transactionAmount);
+             echo "<br> Withdrawal done";
+             echo "<br> Current account balance ".$x->getAmount();
+        }catch (\Exception $exception) {
+            echo $exception->getMessage();
+            exit;
+        }
+    }
+}
+
+    /**
+     * client code
+     */
+    $accountNum = 1234567890;
+    $securityCode = 'security code';
+    $transactionAmount = 400;
+    
+    BankFacade::withdraw($accountNum,$securityCode,$transactionAmount);
+    
+    BankFacade::deposit($accountNum,$securityCode,$transactionAmount);
+
+
+?>
